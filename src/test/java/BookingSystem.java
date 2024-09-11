@@ -1,15 +1,15 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 
 public class BookingSystem {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.easemytrip.com/");
@@ -30,7 +30,8 @@ public class BookingSystem {
         WebElement chandigarhSelection = driver.findElement(By.xpath("//*[@id='toautoFill']/ul/li[1]"));
         chandigarhSelection.click();
         Thread.sleep(2000);
-//departure date
+
+        //departure date
         WebElement activeDepartureDate = driver.findElement(By.className("active-date"));
         WebElement sibling = activeDepartureDate.findElement(By.xpath("following-sibling::*"));
         sibling.click();    //sibling expression : next date after active departure date
@@ -62,20 +63,29 @@ public class BookingSystem {
         driver.findElement(By.id("spnVerifyEmail")).click();
         Thread.sleep(5000);
 
-     //passengerdetails
-        Select titleSelect= new Select(driver.findElement(By.id("titleAdult0")));
+        //passengerdetails
+        Select titleSelect = new Select(driver.findElement(By.id("titleAdult0")));
         titleSelect.selectByValue("Ms");
 
         //name
-        driver.findElement(By.id("txtFNAdult0")).sendKeys("ABC");
-        driver.findElement(By.id("txtLNAdult0")).sendKeys("XYZ");
-        driver.findElement(By.id("txtCPhone")).sendKeys("9856012345");
+        driver.findElement(By.id("txtFNAdult0")).sendKeys("Jenifer");
+        driver.findElement(By.id("txtLNAdult0")).sendKeys("Winget");
+        driver.findElement(By.id("txtCPhone")).sendKeys("9886012345");
         driver.findElement(By.id("spnTransaction")).click();
         Thread.sleep(2000);
+
+        File booking = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(booking, new File("booking.png"));
         driver.findElement(By.xpath("//*[@class='edit_btn'][text()='Skip']")).click();
 
         Thread.sleep(Duration.ofSeconds(5));//5 seconds
-        //driver.findElement(By.xpath("//*[@id='DivContinueAncillary']/span")).click();//continue booking
-           driver.findElement(By.id("skipPop")).click();
+        driver.findElement(By.id("skipPop")).click();
+        Thread.sleep(2000);
+
+        //screenshots
+        File payment = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(payment, new File("payment.png"));
+        driver.close();
+
     }
 }
