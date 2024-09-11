@@ -63,7 +63,7 @@ public class BookingSystem {
         driver.findElement(By.id("spnVerifyEmail")).click();
         Thread.sleep(5000);
 
-        //passengerdetails
+        //passenger details
         Select titleSelect = new Select(driver.findElement(By.id("titleAdult0")));
         titleSelect.selectByValue("Ms");
 
@@ -71,21 +71,19 @@ public class BookingSystem {
         driver.findElement(By.id("txtFNAdult0")).sendKeys("Jenifer");
         driver.findElement(By.id("txtLNAdult0")).sendKeys("Winget");
         driver.findElement(By.id("txtCPhone")).sendKeys("9886012345");
-        driver.findElement(By.id("spnTransaction")).click();
-        Thread.sleep(2000);
 
+        // take screenshot before clicking Continue Booking sor that loading screen is not seen on sc
         File booking = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(booking, new File("booking.png"));
+
+        // click on continue booking after taking screenshot
+        driver.findElement(By.id("spnTransaction")).click();
+
+        Thread.sleep(2000);
         driver.findElement(By.xpath("//*[@class='edit_btn'][text()='Skip']")).click();
 
         Thread.sleep(Duration.ofSeconds(5));//5 seconds
         driver.findElement(By.id("skipPop")).click();
-        Thread.sleep(2000);
-
-        //screenshots
-        File payment = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(payment, new File("payment.png"));
         driver.close();
-
     }
 }
